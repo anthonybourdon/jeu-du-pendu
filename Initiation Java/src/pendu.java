@@ -76,17 +76,11 @@ public class pendu {
 	
 	public static boolean verifierMot(String mot)
 	{
-		//int longueurMot=mot.length();
 		boolean ok= true;
 		
 		if(!(mot.matches("[a-zA-Zé'èçàïêù-]+")))
 			ok=false;
-/*		for(int i=0; i<longueurMot; i++)
-		{
-		if(((int)(mot.charAt(i))<65)||((((int)(mot.charAt(i))<=90))&&(((int)(mot.charAt(i))<97)))||((((int)(mot.charAt(i))>122))&&(((int)(mot.charAt(i))<128)))||((int)(mot.charAt(i))>154))
-			ok=false;		
-		}
-*/		return(ok);
+		return(ok);
 	}
 	
 	
