@@ -7,7 +7,6 @@ public class pendu {
 	
 	public pendu(String recherche)	//constructeur
 	{
-	//int longueurMotATrouver;
 	this.motATrouver=recherche;
 	this.longueurMotATrouver=this.motATrouver.length();
 	char[] temp= new char[this.longueurMotATrouver];
@@ -20,28 +19,23 @@ public class pendu {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 	
-	pendu mot= new pendu("bonjour");
-	System.out.println("Tapez votre mot de " + mot.longueurMotATrouver + " caractères: ");
-	Scanner entree= new Scanner(System.in);
+	
+	
+	//pendu mot= new pendu("bonjour");
+	//System.out.println("Tapez votre mot de " + mot.longueurMotATrouver + " caractères: ");
+	
+	
+	Scanner entree= new Scanner(System.in);	
 	String saisie; //déclaration de la variable qui recevra l'entrée au clavier
 	
-/*		
-	if(verifierMot(saisie))
-		System.out.println(saisie);
-	else
-		System.out.println("le mot n'est pas correct");
-*/	
+	System.out.println("A quoi voulez-vous jouer?");
+	System.out.println("1 Motus     2 Pendu");
+	int flag=entree.nextInt();
+	entree.nextLine();
 	
-/*	
-	while(!(verifierMot(saisie)))
-		{
-		System.out.println("Tapez votre mot: ");
-		saisie=entree.next();
-		}
-	System.out.println(saisie);
-*/	
+	System.out.println("Tapez votre mot : ");
 	
-/*	
+	
 	String[] tableMots= new String[5];
 	for(int i=0; i<5; i++)
 		{
@@ -49,19 +43,25 @@ public class pendu {
 		while(!(verifierMot(saisie)))
 			{
 			System.out.println("Tapez votre mot: ");
-			saisie=entree.next();
+			saisie=entree.nextLine();
 			}
 		tableMots[i]=saisie;	
 		}
 	for(int i=0; i<5; i++)
-		System.out.println(tableMots[i]);	
-*/	
+		System.out.println(tableMots[i]);
+	
+	pendu mot= new pendu(tableMots[(int)(Math.random() * (5-0)) + 0]);
+	System.out.println("Tapez votre mot de " + mot.longueurMotATrouver + " caractères: ");
+
+ 	if(flag==1)
+ 	{
 	do
 		{	
 		//System.out.println("Tapez votre mot de " + mot.longueurMotATrouver + " caractères: ");
 		saisie= entree.nextLine();
 		while(!(verifierMot(saisie)))
 			{
+			System.out.println("Erreur sur le mot entré");
 			System.out.println("Tapez votre mot de " + mot.longueurMotATrouver + " caractères: ");
 			saisie=entree.nextLine();
 			}
@@ -70,9 +70,30 @@ public class pendu {
 		}
 	while(!(mot.motEnPartie.contentEquals(mot.motATrouver)));
 		
-	System.out.println("Bravo!");
+	System.out.println("Bravo!");	
+	}
+ 	else
+ 	{
+	do
+	{	
+	//System.out.println("Tapez votre mot de " + mot.longueurMotATrouver + " caractères: ");
+	saisie= entree.nextLine();
+	while(!(verifierMot(saisie)))
+		{
+		System.out.println("Erreur sur le mot entré");
+		System.out.println("Tapez votre mot de " + mot.longueurMotATrouver + " caractères: ");
+		saisie=entree.nextLine();
+		}
+	mot.comparerLettre(saisie);
+	System.out.println(mot.motEnPartie);
+	}
+while(!(mot.motEnPartie.contentEquals(mot.motATrouver)));
+	
+System.out.println("Bravo!");	
+ 	}
 	entree.close();
 	}
+	
 	
 	public static boolean verifierMot(String mot)
 	{
@@ -106,8 +127,52 @@ public class pendu {
 				temp[i]=this.motEnPartie.charAt(i); //on les remet à leur place dans le tableau.
 			}
 		this.motEnPartie=String.copyValueOf(temp);	//on copie le tableau de caractères trouvés dans l'attribut motEnPartie
-		//System.out.println(this.motEnPartie);
 		}
-		//return(this.motEnPartie);		
+	}
+	
+	public void comparerLettre(String lettre)
+	{
+	char[] temp= new char[this.longueurMotATrouver]; //tableau recevant les lettres bonnes au bon index
+		
+	for(int i=0; i<this.longueurMotATrouver; i++)
+		{
+		if(this.motATrouver.charAt(i)==lettre.charAt(0))  //Si un caractère se trouve on bon endroi
+			temp[i]=lettre.charAt(0);	//on range ce caractère dans un tableau au même index qu'il se trouve dans la chaine
+		else	//sinon on range le caractère '_' à cet index
+			temp[i]='_';
+		}
+	for(int i=0; i<this.longueurMotATrouver; i++)
+		{
+		if(this.motEnPartie.charAt(i)!='_') //si des lettres ont été trouvée au bon endroit sur des essais précédents
+			temp[i]=this.motEnPartie.charAt(i); //on les remet à leur place dans le tableau.
+		}
+		this.motEnPartie=String.copyValueOf(temp);	//on copie le tableau de caractères trouvés dans l'attribut motEnPartie
 	}
 }
+/*		
+if(verifierMot(saisie))
+	System.out.println(saisie);
+else
+	System.out.println("le mot n'est pas correct");
+
+while(!(verifierMot(saisie)))
+	{
+	System.out.println("Tapez votre mot: ");
+	saisie=entree.next();
+	}
+System.out.println(saisie);
+
+String[] tableMots= new String[5];
+for(int i=0; i<5; i++)
+	{
+	saisie=entree.nextLine();
+	while(!(verifierMot(saisie)))
+		{
+		System.out.println("Tapez votre mot: ");
+		saisie=entree.next();
+		}
+	tableMots[i]=saisie;	
+	}
+for(int i=0; i<5; i++)
+	System.out.println(tableMots[i]);	
+*/	
