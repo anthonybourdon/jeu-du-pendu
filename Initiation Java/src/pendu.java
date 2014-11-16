@@ -1,29 +1,23 @@
 import java.util.*;
+import java.lang.StringBuffer;
 
 public class pendu {
 	private String motATrouver;
-	private String motEnPartie;
+	private StringBuffer motEnPartie;
 	private int longueurMotATrouver;
 	
 	public pendu(String recherche)	//constructeur
 	{
-	this.motATrouver=recherche;
-	this.longueurMotATrouver=this.motATrouver.length();
-	char[] temp= new char[this.longueurMotATrouver];
-	
-	for(int i=0; i<this.longueurMotATrouver; i++)
-		temp[i]='_';
-	this.motEnPartie=String.copyValueOf(temp);
+	this.motATrouver=recherche;	//mot cachŽ
+	this.motEnPartie= new StringBuffer(motATrouver);	//instantition du mot en partie ˆ l'aide du mot ˆ trouver
+	this.longueurMotATrouver=this.motATrouver.length();	//nombre de caractres du mot ˆ trouver
+
+	for(int i=0; i<this.longueurMotATrouver; i++)	//mise en place des "_" pour le mot en partie
+		motEnPartie.setCharAt(i, '_');
 	}
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-	
-	
-	
-	//pendu mot= new pendu("bonjour");
-	//System.out.println("Tapez votre mot de " + mot.longueurMotATrouver + " caractres: ");
-	
 	
 	Scanner entree= new Scanner(System.in);	
 	String saisie; //dŽclaration de la variable qui recevra l'entrŽe au clavier
@@ -35,8 +29,8 @@ public class pendu {
 	
 	System.out.println("Tapez votre mot : ");
 	
-	
 	String[] tableMots= new String[5];
+	
 	for(int i=0; i<5; i++)
 		{
 		saisie=entree.nextLine();
@@ -51,128 +45,87 @@ public class pendu {
 		System.out.println(tableMots[i]);
 	
 	pendu mot= new pendu(tableMots[(int)(Math.random() * (5-0)) + 0]);
-	System.out.println("Tapez votre mot de " + mot.longueurMotATrouver + " caractres: ");
-
- 	if(flag==1)
- 	{
-	do
-		{	
-		//System.out.println("Tapez votre mot de " + mot.longueurMotATrouver + " caractres: ");
-		saisie= entree.nextLine();
-		while(!(verifierMot(saisie)))
-			{
-			System.out.println("Erreur sur le mot entrŽ");
-			System.out.println("Tapez votre mot de " + mot.longueurMotATrouver + " caractres: ");
-			saisie=entree.nextLine();
-			}
-		mot.comparerMot(saisie);
-		System.out.println(mot.motEnPartie);
-		}
-	while(!(mot.motEnPartie.contentEquals(mot.motATrouver)));
-		
-	System.out.println("Bravo!");	
-	}
- 	else
- 	{
-	do
-	{	
-	//System.out.println("Tapez votre mot de " + mot.longueurMotATrouver + " caractres: ");
-	saisie= entree.nextLine();
-	while(!(verifierMot(saisie)))
-		{
-		System.out.println("Erreur sur le mot entrŽ");
+	if(flag==1)
 		System.out.println("Tapez votre mot de " + mot.longueurMotATrouver + " caractres: ");
-		saisie=entree.nextLine();
-		}
-	mot.comparerLettre(saisie);
+	else
+		System.out.println("Tapez une lettre pour trouver le mot de " + mot.longueurMotATrouver + " caractres: ");
 	System.out.println(mot.motEnPartie);
-	}
-while(!(mot.motEnPartie.contentEquals(mot.motATrouver)));
 	
-System.out.println("Bravo!");	
- 	}
+ 	if(flag==1)
+ 		{
+ 		do
+ 			{	
+ 			saisie= entree.nextLine();
+ 			while(!(verifierMot(saisie))||!(mot.verifierLongueurMot(saisie)))
+ 				{
+ 				System.out.println("Erreur sur le mot entrŽ");
+ 				System.out.println("Caractres non admis ou longueur du mot non correspondante");
+ 				System.out.println("Tapez votre mot de " + mot.longueurMotATrouver + " caractres: ");
+ 				System.out.println(mot.motEnPartie);
+ 				saisie=entree.nextLine();
+ 				}
+ 			mot.comparerMot(saisie);
+ 			System.out.println(mot.motEnPartie);
+ 			}
+ 		while(!(mot.motATrouver.contentEquals(mot.motEnPartie)));
+ 		}
+ 	else
+ 		{
+ 		do
+ 			{	
+ 			saisie= entree.nextLine();
+ 			while(!(verifierMot(saisie)))
+ 				{
+ 				System.out.println("Erreur sur le caractre entrŽ");		
+ 				System.out.println("Tapez une lettre pour trouver le mot de " + mot.longueurMotATrouver + " caractres: ");
+ 				System.out.println(mot.motEnPartie);
+ 				saisie=entree.nextLine();
+ 				}
+ 			mot.comparerLettre(saisie);
+ 			System.out.println(mot.motEnPartie);
+ 			}
+ 		while(!(mot.motATrouver.contentEquals(mot.motEnPartie)));
+ 		}
+ 	
+ 	System.out.println("Bravo!");	 		
 	entree.close();
 	}
 	
 	
-	public static boolean verifierMot(String mot)
+	public static boolean verifierMot(String motSaisi)
 	{
 		boolean ok= true;
 		
-		if(!(mot.matches("[a-zA-ZŽ'ˆ•-]+")))
+		if(!(motSaisi.matches("[a-zA-ZŽ'ˆ•-]+")))
 			ok=false;
 		return(ok);
 	}
 	
-	
-	public void comparerMot(String mot)
+	public boolean verifierLongueurMot(String motSaisi)
 	{
-	//int nbCaracteres=this.motATrouver.length(); 
-	char[] temp= new char[this.longueurMotATrouver]; //tableau recevant les lettres bonnes au bon index
-	
-	if(mot.length()!=this.longueurMotATrouver) //vŽrification que le mot entrŽ ˆ le bon nombre de caractres
-		System.out.println("le nombre de lettres ne correspond pas");
+	if(motSaisi.length() != this.longueurMotATrouver)
+		return(false);
 	else
-		{
-		for(int i=0; i<this.longueurMotATrouver; i++)
-			{	//VŽrification de chaque caratre du mot entrŽ
-			if(this.motATrouver.charAt(i)==mot.charAt(i))  //Si un caractre se trouve on bon endroi
-				temp[i]=mot.charAt(i);	//on range ce caractre dans un tableau au mme index qu'il se trouve dans la chaine
-			else	//sinon on range le caractre '_' ˆ cet index
-				temp[i]='_';
-			}
-		for(int i=0; i<this.longueurMotATrouver; i++)
-			{
-			if(this.motEnPartie.charAt(i)!='_') //si des lettres ont ŽtŽ trouvŽe au bon endroit sur des essais prŽcŽdents
-				temp[i]=this.motEnPartie.charAt(i); //on les remet ˆ leur place dans le tableau.
-			}
-		this.motEnPartie=String.copyValueOf(temp);	//on copie le tableau de caractres trouvŽs dans l'attribut motEnPartie
+		return(true);
+		
+	}
+	
+	public void comparerMot(String motSaisi)
+	{	
+	for(int i=0; i<this.longueurMotATrouver; i++)
+		{	//VŽrification de chaque caratre du mot entrŽ
+		if(this.motATrouver.charAt(i)==motSaisi.charAt(i))  //Si un caractre se trouve on bon endroi
+			this.motEnPartie.setCharAt(i, this.motATrouver.charAt(i));	//on le met dans motEnPartie
 		}
 	}
 	
 	public void comparerLettre(String lettre)
-	{
-	char[] temp= new char[this.longueurMotATrouver]; //tableau recevant les lettres bonnes au bon index
-		
+	{	
 	for(int i=0; i<this.longueurMotATrouver; i++)
 		{
-		if(this.motATrouver.charAt(i)==lettre.charAt(0))  //Si un caractre se trouve on bon endroi
-			temp[i]=lettre.charAt(0);	//on range ce caractre dans un tableau au mme index qu'il se trouve dans la chaine
-		else	//sinon on range le caractre '_' ˆ cet index
-			temp[i]='_';
+		if(this.motATrouver.charAt(i)==lettre.charAt(0))  //Si un caractre se trouve dans le mot ˆ trouver
+			this.motEnPartie.setCharAt(i, lettre.charAt(0));	//on le met ˆ sa place dans motEnPartie
 		}
-	for(int i=0; i<this.longueurMotATrouver; i++)
-		{
-		if(this.motEnPartie.charAt(i)!='_') //si des lettres ont ŽtŽ trouvŽe au bon endroit sur des essais prŽcŽdents
-			temp[i]=this.motEnPartie.charAt(i); //on les remet ˆ leur place dans le tableau.
-		}
-		this.motEnPartie=String.copyValueOf(temp);	//on copie le tableau de caractres trouvŽs dans l'attribut motEnPartie
 	}
 }
-/*		
-if(verifierMot(saisie))
-	System.out.println(saisie);
-else
-	System.out.println("le mot n'est pas correct");
 
-while(!(verifierMot(saisie)))
-	{
-	System.out.println("Tapez votre mot: ");
-	saisie=entree.next();
-	}
-System.out.println(saisie);
-
-String[] tableMots= new String[5];
-for(int i=0; i<5; i++)
-	{
-	saisie=entree.nextLine();
-	while(!(verifierMot(saisie)))
-		{
-		System.out.println("Tapez votre mot: ");
-		saisie=entree.next();
-		}
-	tableMots[i]=saisie;	
-	}
-for(int i=0; i<5; i++)
-	System.out.println(tableMots[i]);	
-*/	
